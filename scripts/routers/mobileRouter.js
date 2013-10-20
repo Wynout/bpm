@@ -35,6 +35,7 @@ function ( $, Backbone, CategoryModel, CategoriesCollection, CategoryView ) {
 
             // When there is no hash bang on the url, the home method is called
             "": "home",
+            "index.html": "home",
 
             // When #category? is on the url, the category method is called
             "category?:type": "category"
