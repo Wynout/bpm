@@ -26,19 +26,107 @@ require.config( {
 // Includes File Dependencies
 require([ "jquery", "backbone", "routers/mobileRouter" ], function( $, Backbone, Mobile ) {
 
-	$( document ).on( "mobileinit",
-		// Set up the "mobileinit" handler before requiring jQuery Mobile's module
-		function() {
-			// Prevents all anchor click handling including the addition of active button state and alternate link bluring.
-			$.mobile.linkBindingEnabled = false;
+    $( document ).on( "mobileinit",
+        // Set up the "mobileinit" handler before requiring jQuery Mobile's module
+        function () {
 
-			// Disabling this will prevent jQuery Mobile from handling hash changes
-			$.mobile.hashListeningEnabled = false;
-		}
-	);
+            // $.mobile.defaultPageTransition = 'slide';
+            // $.mobile.pushStateEnabled = false;
+            $.support.cors = true;
+            $.mobile.allowCrossDomainPages = true;
+            $.mobile.buttonMarkup.hoverDelay = 0;
+            // https://github.com/davidcalhoun/energize.js
 
-	require( [ "jquerymobile" ], function() {
-		// Instantiates a new Backbone.js Mobile Router
-		this.router = new Mobile();
-	});
+            // Prevents all anchor click handling including the addition of active button state and alternate link bluring.
+            $.mobile.linkBindingEnabled = false;
+
+            // Disabling this will prevent jQuery Mobile from handling hash changes
+            $.mobile.hashListeningEnabled = false;
+
+            $.mobile.changePage.defaults.transition = 'slide';
+            $.mobile.changePage.defaults.reverse = true;
+
+
+            // Change Page on a[data-rel="back"] elements
+            var defaults = $.mobile.changePage.defaults;
+            $(document).on('click', 'a[data-rel="back"]', function (event) {
+
+                // event.preventDefault();
+                var $this = $(this);
+
+                if ($this.attr('data-transition')) {
+
+                    $.mobile.changePage.defaults.transition = $this.attr('data-transition');
+                } else {
+
+                    $.mobile.changePage.defaults.transition = defaults.transition;
+                }
+
+                if ($this.attr('data-direction')) {
+
+                    $.mobile.changePage.defaults.reverse = $this.attr('data-direction') == 'reverse';
+                } else {
+
+                    $.mobile.changePage.defaults.reverse = false;
+                }
+
+                $.mobile.changePage($this.attr('href'));
+                // window.history.back();
+                // return false;
+            });
+        }
+    );
+
+    require( [ "jquerymobile" ], function () {
+
+        // Instantiates a new Backbone.js Mobile Router
+        this.router = new Mobile();
+    });
+
+
+// Swipe
+$( document ).on( "pageinit", "[data-role='page']", function() {
+console.log('swipe');
+    var page = "#" + $( this ).attr( "id" ),
+    // Get the filename of the next page that we stored in the data-next attribute
+    next = $( this ).jqmData( "next" ),
+    // Get the filename of the previous page that we stored in the data-prev attribute
+    prev = $( this ).jqmData( "prev" );
+
+    // Check if we did set the data-next attribute
+    if ( next ) {
+        // Prefetch the next page
+        $.mobile.loadPage(next);
+        // Navigate to next page on swipe left
+        $( document ).on( "swipeleft", page, function () {
+
+            $.mobile.changePage( next, { transition: "slide" });
+        });
+        // Navigate to next page when the "next" button is clicked
+        $( ".control .next", page ).on( "click", function() {
+            $.mobile.changePage( next , { transition: "slide" } );
+        });
+    }
+    // Disable the "next" button if there is no next page
+    else {
+        $( ".control .next", page ).addClass( "ui-disabled" );
+    }
+    // The same for the previous page (we set data-dom-cache="true" so there is no need to prefetch)
+    if ( prev ) {
+        console.log(prev);
+        $( document ).on( "swiperight", page, function() {
+            $.mobile.changePage( prev, { transition: "slide", reverse: true } );
+        });
+        $( ".control .prev", page ).on( "click", function() {
+            $.mobile.changePage( prev, { transition: "slide", reverse: true } );
+        });
+    }
+    else {
+       $( ".control .prev", page ).addClass( "ui-disabled" );
+    }
+});
+
+
+
+
 } );
