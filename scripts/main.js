@@ -70,12 +70,12 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
             $.mobile.allowCrossDomainPages = true;
 
 /*test http://rogerstringer.com/2012/08/12/make-scrolling-faster-on-android-devices-with-jquery-mobile/*/
-$.mobile.touchOverflowEnabled = false;
-$.mobile.defaultPageTransition = 'none';
-$.mobile.defaultDialogTransition = 'none';
-$.mobile.useFastClick = false
-$.mobile.buttonMarkup.hoverDelay = 0;
-$.mobile.page.prototype.options.domCache = false;
+$.mobile.touchOverflowEnabled                   = false;
+$.mobile.defaultPageTransition                  = 'none';
+$.mobile.defaultDialogTransition                = 'none';
+$.mobile.useFastClick                           = false;
+$.mobile.buttonMarkup.hoverDelay                = 0;
+$.mobile.page.prototype.options.domCache        = false;
 $.event.special.swipe.scrollSupressionThreshold = 100;
 
 
@@ -119,8 +119,8 @@ $.event.special.swipe.scrollSupressionThreshold = 100;
                 // return false;
             });
         }
-        $(document).bind("touchstart", function(event){}); // test
     );
+    $(document).bind("touchstart", function (event) {}); // test
 
 
     /*
