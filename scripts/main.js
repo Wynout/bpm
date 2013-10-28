@@ -16,7 +16,8 @@ require.config({
             'highcharts': 'vendor/highcharts/highcharts',
             'burry': 'vendor/backbone-caching-sync/burry',
             'cachingsync': 'vendor/backbone-caching-sync/backbone.cachingsync',
-            'highcharts-theme': 'vendor/highcharts/themes/gray'
+            'highcharts-theme': 'vendor/highcharts/themes/gray',
+            'energize': 'vendor/energize/energize'
 
       },
 
@@ -24,7 +25,7 @@ require.config({
       shim: {
 
             'backbone': {
-                  'deps': ['underscore', 'jquery'],
+                  'deps': ['underscore', 'jquery', 'energize'],
                   'exports': 'Backbone'  //attaches 'Backbone' to the window object
             },
             'highcharts': {
@@ -68,16 +69,6 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
             // $.mobile.pushStateEnabled = false;
             $.support.cors = true;
             $.mobile.allowCrossDomainPages = true;
-
-/*test http://rogerstringer.com/2012/08/12/make-scrolling-faster-on-android-devices-with-jquery-mobile/*/
-$.mobile.touchOverflowEnabled                   = false;
-$.mobile.defaultPageTransition                  = 'none';
-$.mobile.defaultDialogTransition                = 'none';
-$.mobile.useFastClick                           = false;
-$.mobile.buttonMarkup.hoverDelay                = 0;
-$.mobile.page.prototype.options.domCache        = false;
-$.event.special.swipe.scrollSupressionThreshold = 100;
-
 
             // $.mobile.buttonMarkup.hoverDelay = 0;
             // https://github.com/davidcalhoun/energize.js
