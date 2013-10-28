@@ -68,7 +68,18 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
             // $.mobile.pushStateEnabled = false;
             $.support.cors = true;
             $.mobile.allowCrossDomainPages = true;
-            $.mobile.buttonMarkup.hoverDelay = 0;
+
+/*test http://rogerstringer.com/2012/08/12/make-scrolling-faster-on-android-devices-with-jquery-mobile/*/
+$.mobile.touchOverflowEnabled = false;
+$.mobile.defaultPageTransition = 'none';
+$.mobile.defaultDialogTransition = 'none';
+$.mobile.useFastClick = false
+$.mobile.buttonMarkup.hoverDelay = 0;
+$.mobile.page.prototype.options.domCache = false;
+$.event.special.swipe.scrollSupressionThreshold = 100;
+
+
+            // $.mobile.buttonMarkup.hoverDelay = 0;
             // https://github.com/davidcalhoun/energize.js
 
             // Prevents all anchor click handling including the addition of active button state and alternate link bluring.
@@ -108,6 +119,7 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
                 // return false;
             });
         }
+        $(document).bind("touchstart", function(event){}); // test
     );
 
 
