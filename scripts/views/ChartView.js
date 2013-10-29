@@ -44,7 +44,7 @@ function ($, Backbone, Highcharts, DefaultOptions) {
             },
             yAxis: {
                 title: {
-                    text: 'Recent granted credits'
+                    text: 'Recent average credits'
                 }
             },
             tooltip: {},
