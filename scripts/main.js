@@ -150,7 +150,7 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
     | Instantiates a new Backbone.js Router                 app/scripts/main.js
     |--------------------------------------------------------------------------
     */
-    require([ 'jquerymobile' ], function () {
+    require(['jquerymobile'], function () {
 
         App.router =  new Router();
     });
