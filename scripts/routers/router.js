@@ -9,88 +9,90 @@ define([
     'cachingsync',
 
     '../collections/ProjectsCollection',
-    '../views/ProjectView',
+    '../views/projects/ProjectsView',
 
-    '../collections/TotalUserRacHistoriesCollection',
-    '../views/ChartView'
-    ],
-
-function ($, Backbone, CachingSync, ProjectsCollection,
-    ProjectView, TotalUserRacHistoriesCollection, ChartView) {
+    '../models/TotalRacModel',
+    '../collections/TotalRacCollection',
+    '../collections/TeamMemberRacCollection',
+    '../views/totalrac/TotalRacView',
+    '../views/teammemberrac/TeamMemberRacView'
+], function (
+    $,
+    Backbone,
+    CachingSync,
+    ProjectsCollection,
+    ProjectView,
+    TotalRacModel,
+    TotalRacCollection,
+    TeamMemberRacCollection,
+    TotalRacView,
+    TeamMemberRacView
+    ) {
 
 
     var Router = Backbone.Router.extend( {
 
-        // The Router constructor
         initialize: function() {
 
-            // Instantiates a new Projects List View
             App.Collections.Projects = new ProjectsCollection();
-            App.Collections.TotalUserRacHistories = new TotalUserRacHistoriesCollection();
-            App.Views.Projects = new ProjectView({el: '#projects', collection: App.Collections.Projects});
-            App.Views.TotalUserRacHistories = new ChartView({id: 'totalUserRacHistoriesGraph'});
+            App.Collections.TotalRac = new TotalRacCollection();
+            App.Collections.TeamMemberRacCollection = new TeamMemberRacCollection();
 
+            App.Models.TotalRac = new TotalRacModel();
 
-            // $('#totalUserRacHistories').on('pagehide', function (e, data) {
+            App.Views.Projects = new ProjectView({collection: App.Collections.Projects});
+            App.Views.TotalRac = new TotalRacView();
+            App.Views.TeamMemberRac = new TeamMemberRacView();
 
-            //     console.log('pagehide complete!');
-            // });
+            $('#total-rac').on('pageshow', function (e, data) {
 
-            $('#totalUserRacHistories').on('pageshow', function (e, data) {
-
-                // console.log('pageshow');
-                App.Views.TotalUserRacHistories.render();
+                App.Views.TotalRac.render();
             });
-
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
         },
 
 
-        // Backbone Routes
         routes: {
-
             '': 'projects',
             'projects': 'projects',
             'project/:id': 'project',
-            'project/:id/total/user/rac/history': 'totalUserRacHistories',
+            'project:(:projectId)/total/rac': 'projectTotalRac',
+            'projects/total/rac/page:(:page)': 'projectsTotalRac',
+            'team/rac/project::projectId/team:(:teamId)/user:(:userId)/page:(:page)': 'teamMemberRac'
         },
 
 
-        // Chart #project/:id/total/user/rac/history
-        totalUserRacHistories: function (id) {
+        projectTotalRac: function (projectId) {
 
-            App.Collections.TotalUserRacHistories.fetch().then(function () {
-
-                App.Views.TotalUserRacHistories.model = App.Collections.TotalUserRacHistories.get(id);
-                $.mobile.changePage('#totalUserRacHistories', {reverse: false, changeHash: true});
-
-            }, function (error) {
-
-                console.log(error);
-            });
+            App.vent.trigger('projectTotalRac:showSingle', projectId);
         },
 
 
-        // Home method
-        projects: function() {
+        projectsTotalRac: function (page) {
 
-            $.mobile.loading( 'show' );
-
-            App.Collections.Projects.fetch().then(function () {
-
-                $.mobile.loading( 'hide' );
-            });
+            App.vent.trigger('projectTotalRac:showAll', page);
         },
 
 
-        // Project method
+        // Chart #team/rac/project:1/team:81/user:13479/page:1
+        teamMemberRac: function (projectId, teamId, userId, page) {
+
+            App.vent.trigger('teamMemberRac:show', projectId, teamId, userId, page);
+        },
+
+
         project: function (id) {
 
-            console.log(id);
-        }
+            App.vent.trigger('projects:showSingle');
+        },
 
+
+        projects: function() {
+
+            App.vent.trigger('projects:showAll');
+        }
 
     });
 
