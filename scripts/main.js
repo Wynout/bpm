@@ -54,7 +54,7 @@ require.config({
         Collections: {},
         Views: {},
         Router: {},
-        Events: {}
+        vent: {}
     };
 })();
 

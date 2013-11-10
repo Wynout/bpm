@@ -4,6 +4,7 @@
 |--------------------------------------------------------------------------
 */
 define([
+    'domReady!',
     'jquery',
     'backbone',
     'cachingsync',
@@ -17,6 +18,7 @@ define([
     '../views/totalrac/TotalRacView',
     '../views/teammemberrac/TeamMemberRacView'
 ], function (
+    doc,
     $,
     Backbone,
     CachingSync,
@@ -34,11 +36,11 @@ define([
 
         initialize: function() {
 
+            App.Models.TotalRac = new TotalRacModel();
+
             App.Collections.Projects = new ProjectsCollection();
             App.Collections.TotalRac = new TotalRacCollection();
             App.Collections.TeamMemberRacCollection = new TeamMemberRacCollection();
-
-            App.Models.TotalRac = new TotalRacModel();
 
             App.Views.Projects = new ProjectView({collection: App.Collections.Projects});
             App.Views.TotalRac = new TotalRacView();
