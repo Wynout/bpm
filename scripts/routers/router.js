@@ -4,7 +4,6 @@
 |--------------------------------------------------------------------------
 */
 define([
-    'domReady',
     'jquery',
     'backbone',
     'cachingsync',
@@ -18,7 +17,6 @@ define([
     '../views/totalrac/TotalRacView',
     '../views/teammemberrac/TeamMemberRacView'
 ], function (
-    domReady,
     $,
     Backbone,
     CachingSync,
@@ -30,15 +28,6 @@ define([
     TotalRacView,
     TeamMemberRacView
     ) {
-
-
-    domReady(function () {
-
-        $('#total-rac').on('pageshow', function (e, data) {
-
-            App.Views.TotalRac.render();
-        });
-    });
 
 
     var Router = Backbone.Router.extend( {
@@ -54,8 +43,6 @@ define([
             App.Views.Projects = new ProjectView({collection: App.Collections.Projects});
             App.Views.TotalRac = new TotalRacView();
             App.Views.TeamMemberRac = new TeamMemberRacView();
-
-
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();

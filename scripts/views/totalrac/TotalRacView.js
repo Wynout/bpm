@@ -18,6 +18,13 @@ define([
 
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
+
+            var self = this;
+
+            this.$el.on('pageshow', function () {
+
+                self.render();
+            });
         },
 
 
@@ -30,6 +37,7 @@ define([
 
                     self.model = App.Models.TotalRac;
                     self.page = null;
+
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
