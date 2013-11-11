@@ -125,21 +125,21 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
                 // return false;
             });
 
-            $(document).on('pagebeforecreate', '[data-role="page"]', function () {
+            // $(document).on('pagebeforecreate', '[data-role="page"]', function () {
 
-                setTimeout(function () {
+            //     setTimeout(function () {
 
-                    $.mobile.loading('show');
-                }, 1);
-            });
+            //         $.mobile.loading('show');
+            //     }, 1);
+            // });
 
-            $(document).on('pageshow', '[data-role="page"]', function () {
+            // $(document).on('pageshow', '[data-role="page"]', function () {
 
-                setTimeout(function () {
+            //     setTimeout(function () {
 
-                    $.mobile.loading('hide');
-                }, 300);
-            });
+            //         $.mobile.loading('hide');
+            //     }, 300);
+            // });
 
         }
     );
