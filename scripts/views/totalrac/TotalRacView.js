@@ -19,12 +19,12 @@ define([
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
 
-            var self = this;
+            // var self = this;
 
-            this.$el.on('pageshow', function () {
+            // this.$el.on('pageshow', function () {
 
-                self.render();
-            });
+            //     self.render();
+            // });
         },
 
 
@@ -71,7 +71,7 @@ define([
 
         render: function () {
 
-            this.$el.html(totalRacTemplate);
+            // this.$el.html(totalRacTemplate);
 
             App.Views.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
             App.Views.TotalRacChart.model = this.model;
