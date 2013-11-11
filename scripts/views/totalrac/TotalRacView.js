@@ -18,6 +18,13 @@ define([
 
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
+
+            var self = this;
+
+            this.$el.on('pageshow', function () {
+
+                self.renderChart();
+            });
         },
 
 
@@ -65,16 +72,22 @@ define([
         render: function () {
 
             this.$el.html(totalRacTemplate);
-            this.$el.page();
+            this.$el.trigger('pagecreate');
 
-            App.Views.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
+            return this;
+        },
+
+
+        renderChart: function () {
+
+            App.Views.TotalRacChart       = new TotalRacChartView({id: 'total-rac-chart'});
             App.Views.TotalRacChart.model = this.model;
             App.Views.TotalRacChart.page  = this.page;
 
-            // this.$el.trigger('pageinit');
             App.Views.TotalRacChart.render();
 
             return this;
         }
+
     });
 });
