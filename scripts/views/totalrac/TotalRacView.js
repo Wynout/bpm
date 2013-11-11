@@ -72,6 +72,10 @@ define([
             this.$el.on('pageshow', function (event, data) {
 
                 // self.render();
+
+                self.chart.setSize($('#total-rac-chart').width(), 500);
+                self.chart.redraw();
+
             });
         },
 
@@ -168,9 +172,23 @@ define([
                 });
             }
 
-            this.chart.setTitle({text: title});
-            this.chart.redraw();
+
+            // this.$el.on('pageshow', function (event, data) {
+                this.chart.setTitle({text: title});
+                // this.chart.redraw();
+            // })
+
+
             // this.chart.hideLoading();
+
+            // console.log($('#total-rac').width());
+            // console.log($('[data-role="content"]').first().width());
+
+            // $(window).trigger('resize', function () {
+
+            //      self.chart.setSize(this.$el.width(), 500);
+            // });
+
             return this;
 
         }
