@@ -37,7 +37,7 @@ define([
 
                     self.model = App.Models.TotalRac;
                     self.page = null;
-
+                    self.render();
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
