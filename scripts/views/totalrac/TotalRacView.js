@@ -16,12 +16,18 @@ define([
 
         initialize: function () {
 
+            var self = this;
+
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
 
             this.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
-            // App.Views.TotalRacChart.model = this.model;
-            // App.Views.TotalRacChart.page  = this.page;
+
+            $('#total-rac').on('pageshow', function (event, data) {
+
+                self.TotalRacChart.render();
+            });
+
         },
 
 
@@ -34,7 +40,7 @@ define([
 
                     self.TotalRacChart.model = App.Models.TotalRac;
                     self.TotalRacChart.page  = null;
-                    self.TotalRacChart.render();
+                    // self.TotalRacChart.render();
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
@@ -55,9 +61,10 @@ define([
                     response = response[0];
                 }
 
-                self.model = null;
-                self.page  = response;
-                self.render();
+                self.TotalRacChart.model = null;
+                self.TotalRacChart.page  = response;
+                // self.TotalRacChart.render();
+
                 $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
 
             }, function (error) {
