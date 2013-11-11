@@ -19,7 +19,7 @@ define([
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
 
-            // var self = this;
+            var self = this;
 
             this.$el.on('pageshow', function () {
 
