@@ -19,12 +19,9 @@ define([
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
 
-            var self = this;
-
-            this.$el.on('pageshow', function () {
-
-                self.render();
-            });
+            this.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
+            // App.Views.TotalRacChart.model = this.model;
+            // App.Views.TotalRacChart.page  = this.page;
         },
 
 
@@ -35,8 +32,9 @@ define([
             App.Models.TotalRac.fetch({
                 success: function () {
 
-                    self.model = App.Models.TotalRac;
-                    self.page = null;
+                    self.TotalRacChart.model = App.Models.TotalRac;
+                    self.TotalRacChart.page  = null;
+                    self.TotalRacChart.render();
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
@@ -59,6 +57,7 @@ define([
 
                 self.model = null;
                 self.page  = response;
+                self.render();
                 $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
 
             }, function (error) {
@@ -72,12 +71,14 @@ define([
 
             // this.$el.html(totalRacTemplate);
 
-            App.Views.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
-            App.Views.TotalRacChart.model = this.model;
-            App.Views.TotalRacChart.page  = this.page;
 
-            // this.$el.trigger('pagecreate');
-            App.Views.TotalRacChart.render();
+
+            // App.Views.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
+            // App.Views.TotalRacChart.model = this.model;
+            // App.Views.TotalRacChart.page  = this.page;
+
+            // // this.$el.trigger('pagecreate');
+            // App.Views.TotalRacChart.render();
 
             return this;
         }
