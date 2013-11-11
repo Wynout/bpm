@@ -21,8 +21,17 @@ define([
 
             var self = this;
 
-            this.$el.on('pageshow', function () {
+            this.$el.on('pagebeforeshow', function (event, ui) {
 
+                console.log('on pagebeforeshow: Triggered on the "toPage" we are transitioning to, before the actual transition animation is kicked off.');
+                console.log(ui);
+                self.render();
+            });
+
+            this.$el.on('pageshow', function (event, ui) {
+
+                console.log('on pageshow: Triggered on the "toPage" after the transition animation has completed.');
+                console.log(ui);
                 self.renderChart();
             });
         },
@@ -37,7 +46,7 @@ define([
 
                     self.model = App.Models.TotalRac;
                     self.page = null;
-                    self.render();
+
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
@@ -73,7 +82,6 @@ define([
 
             this.$el.html(totalRacTemplate);
             this.$el.trigger('pagecreate');
-
             return this;
         },
 
@@ -83,11 +91,8 @@ define([
             App.Views.TotalRacChart       = new TotalRacChartView({id: 'total-rac-chart'});
             App.Views.TotalRacChart.model = this.model;
             App.Views.TotalRacChart.page  = this.page;
-
             App.Views.TotalRacChart.render();
-
             return this;
         }
-
     });
 });
