@@ -21,10 +21,10 @@ define([
 
             // var self = this;
 
-            // this.$el.on('pageshow', function () {
+            this.$el.on('pageshow', function () {
 
-            //     self.render();
-            // });
+                self.render();
+            });
         },
 
 
@@ -37,7 +37,6 @@ define([
 
                     self.model = App.Models.TotalRac;
                     self.page = null;
-                    self.render();
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
