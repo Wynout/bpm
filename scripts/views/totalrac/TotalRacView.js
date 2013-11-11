@@ -6,28 +6,73 @@
 define([
     'jquery',
     'backbone',
+    'highstock',
+    'highstock-theme'
+    /*,
     'views/totalrac/TotalRacChartView',
-    'text!templates/totalrac/TotalRacView.html'
-], function ($, Backbone, TotalRacChartView, totalRacTemplate) {
+    'text!templates/totalrac/TotalRacView.html'*/
+], function ($, Backbone, Highstock) {
 
     return Backbone.View.extend({
 
         el: $('#total-rac'),
 
+        model: null,
+        page: null,
+
+        options: {
+            chart:{
+
+            },
+
+            yAxis: {
+                labels: {
+                    // formatter: function() {
+                    //     return (this.value > 0 ? '+' : '') + this.value + '%';
+                    // }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 2,
+                    color: 'silver'
+                }]
+            },
+
+            plotOptions: {
+                series: {
+                    dataGrouping: {
+                        enabled: true
+                    }
+                }
+            },
+            tooltip: {
+                // formatter: function() {
+                //     var s = '<b>'+ this.x +'</b>';
+
+                //     $.each(this.points, function(i, point) {
+                //         s += '<br/>'+ point.series.name +': '+
+                //             point.y +'m';
+                //     });
+
+                //     return s;
+                // },
+                shared: true
+            }
+        },
+
         initialize: function () {
 
             var self = this;
 
+            this.options.chart.renderTo = 'total-rac-chart';
+
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
 
-            this.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
+            this.$el.on('pageshow', function (event, data) {
 
-            $('#total-rac').on('pageshow', function (event, data) {
-
-                self.TotalRacChart.render();
+                self.render();
             });
-
         },
 
 
@@ -38,9 +83,9 @@ define([
             App.Models.TotalRac.fetch({
                 success: function () {
 
-                    self.TotalRacChart.model = App.Models.TotalRac;
-                    self.TotalRacChart.page  = null;
-                    // self.TotalRacChart.render();
+                    self.model = App.Models.TotalRac;
+                    self.page  = null;
+
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
@@ -61,10 +106,8 @@ define([
                     response = response[0];
                 }
 
-                self.TotalRacChart.model = null;
-                self.TotalRacChart.page  = response;
-                // self.TotalRacChart.render();
-
+                self.model = null;
+                self.page  = response;
                 $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
 
             }, function (error) {
@@ -76,18 +119,59 @@ define([
 
         render: function () {
 
-            // this.$el.html(totalRacTemplate);
+            var self = this;
+
+            if (this.chart===undefined) {
+
+                this.chart = new Highcharts.StockChart(this.options);
+            }
+
+            this.chart.showLoading();
+
+            while (this.chart.series.length > 0) {
+
+                this.chart.series[0].remove(true);
+            }
+
+            var title = '';
+
+            // $('#totalUserRacHistories h1').text('project.name');
 
 
+            if (!_.isNull(this.model)) {
 
-            // App.Views.TotalRacChart = new TotalRacChartView({id: 'total-rac-chart'});
-            // App.Views.TotalRacChart.model = this.model;
-            // App.Views.TotalRacChart.page  = this.page;
+                var project = this.model.get('project');
 
-            // // this.$el.trigger('pagecreate');
-            // App.Views.TotalRacChart.render();
+                title = 'Total RAC for project ' + project.name;
 
+                this.chart.addSeries({
+                    name: project.name ,
+                    pointStart: this.model.get('start_timestamp')*1000,
+                    pointInterval: 24*3600*1000,
+                    data: this.model.get('rac'),
+                }, false);
+
+
+            } else if (!_.isNull(this.page)) {
+
+                title = 'Total RAC for projects';
+
+                _.each(this.page.results, function (result, index) {
+
+                    self.chart.addSeries({
+                        name: result.project.name,
+                        pointStart: result.start_timestamp*1000,
+                        pointInterval: 24*3600*1000,
+                        data: result.rac,
+                    }, false);
+                });
+            }
+
+            this.chart.setTitle({text: title});
+            this.chart.redraw();
+            this.chart.hideLoading();
             return this;
+
         }
     });
 });
