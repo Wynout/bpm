@@ -71,7 +71,7 @@ define([
 
             this.$el.on('pageshow', function (event, data) {
 
-                self.render();
+                // self.render();
             });
         },
 
@@ -85,7 +85,7 @@ define([
 
                     self.model = App.Models.TotalRac;
                     self.page  = null;
-
+                    self.render();
                     $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
                 }
             }).always(function () {
@@ -108,6 +108,7 @@ define([
 
                 self.model = null;
                 self.page  = response;
+                self.render();
                 $.mobile.changePage('#total-rac', {reverse: false, changeHash: true});
 
             }, function (error) {
@@ -126,7 +127,7 @@ define([
                 this.chart = new Highcharts.StockChart(this.options);
             }
 
-            this.chart.showLoading();
+            // this.chart.showLoading();
 
             while (this.chart.series.length > 0) {
 
@@ -169,7 +170,7 @@ define([
 
             this.chart.setTitle({text: title});
             this.chart.redraw();
-            this.chart.hideLoading();
+            // this.chart.hideLoading();
             return this;
 
         }
