@@ -22,7 +22,8 @@ define([
 
         options: {
             chart:{
-
+                // Whether to reflow the chart to fit the width of the container div on resizing the window. Defaults to true.
+                reflow: false
             },
 
             yAxis: {
@@ -68,15 +69,31 @@ define([
 
             App.vent.on('projectTotalRac:showSingle', this.showSingle, this);
             App.vent.on('projectTotalRac:showAll', this.showAll, this);
+            App.vent.on('resize:'+this.$el.attr('id'), this.reflow, this);
+// console.log(this.$el.attr('id'));
+
+
+            // $(window).resize(function () {
+
+            //     clearTimeout(this.id);
+            //     this.id = setTimeout(self.reflow.bind(self), 300);
+            // });
 
             this.$el.on('pageshow', function (event, data) {
 
-                // self.render();
-
-                self.chart.setSize($('#total-rac-chart').width(), 500);
+                // self.reflow();
                 self.chart.redraw();
-
             });
+        },
+
+
+        reflow: function (viewport) {
+            // // $.mobile.activePage.attr('id')
+            // this.height = $(window).height() - this.$el.find('div[data-role="header"]').first().outerHeight(true);
+            // this.width  = window.outerWidth; // includes with scrollbar
+            console.log('reflow');
+            console.log(viewport);
+            this.chart.setSize(viewport.width, viewport.height, false);
         },
 
 

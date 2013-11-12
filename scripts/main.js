@@ -67,6 +67,49 @@ require.config({
 require(['backbone'], function (Backbone) {
 
     App.vent = _.extend({}, Backbone.Events);
+
+
+
+    $(document).on('pagechange', function () {
+
+        console.log('pagechange');
+        App.vent.trigger('resize:'+$.mobile.activePage.attr('id'), getViewportSize());
+
+    });
+
+    $(window).resize(function () {
+
+        // console.log('resize');
+        // console.log($.mobile.activePage.attr( "id" ));
+
+        clearTimeout(this.id);
+        this.id = setTimeout(function () {
+
+            // var $content = $.mobile.activePage.find('div[data-role="content"]').first();
+
+            App.vent.trigger('resize:'+$.mobile.activePage.attr('id'), getViewportSize());
+
+        }, 300);
+
+    });
+
+
+    function getViewportSize() {
+
+        var $header      = $.mobile.activePage.find('div[data-role="header"]').first(),
+            headerHeight = $header.length>0 ? $header.outerHeight(true) : 0;
+
+            console.log('headerHeight');
+            console.log(headerHeight);
+
+        return {
+            height: $(window).height() - headerHeight,
+            width: window.outerWidth // includes width scrollbar
+        };
+    }
+
+
+
 });
 
 
