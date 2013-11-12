@@ -20,7 +20,7 @@ require.config({
             'burry': 'vendor/backbone-caching-sync/burry',
             'cachingsync': 'vendor/backbone-caching-sync/backbone.cachingsync',
             'energize': 'vendor/energize/energize',
-            'highstock': 'vendor/highstock/highstock',
+            'highstock': 'vendor/highstock/highstock.src',
             'highstock-theme': 'vendor/highstock/themes/gray'
       },
 
@@ -69,6 +69,12 @@ require(['backbone'], function (Backbone) {
     App.vent = _.extend({}, Backbone.Events);
 
 
+    $(document).ready(function () {
+
+        App.isDesktop = !('ontouchstart' in window) // works on most browsers
+                        || !('onmsgesturechange' in window); // works on ie10
+    });
+
 
     $(document).on('pagechange', function () {
 
@@ -96,15 +102,23 @@ require(['backbone'], function (Backbone) {
 
     function getViewportSize() {
 
-        var $header      = $.mobile.activePage.find('div[data-role="header"]').first(),
-            headerHeight = $header.length>0 ? $header.outerHeight(true) : 0;
+        var $header        = $.mobile.activePage.find('div[data-role="header"]').first(),
+            headerHeight   = $header.length>0 ? $header.outerHeight(true) : 0,
+            pageOuterWidth = $.mobile.activePage.outerWidth(true),
+            width;
 
-            console.log('headerHeight');
-            console.log(headerHeight);
+        if (App.isDesktop && (window.outerWidth - pageOuterWidth)<=20 ) {
+
+            width = window.outerWidth // need to include width scrollbar
+
+        } else {
+
+            width = $.mobile.activePage.outerWidth(true);
+        }
 
         return {
             height: $(window).height() - headerHeight,
-            width: window.outerWidth // includes width scrollbar
+            width: width
         };
     }
 
