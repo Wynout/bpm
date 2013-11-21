@@ -3,41 +3,35 @@
 <head>
 	<title>Backbone.js, Require.js, and jQuery Mobile</title>
 	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
 	<link rel="stylesheet" href="scripts/vendor/jquery-mobile/jquery.mobile-1.3.2.css" />
+	<link rel="stylesheet" href="css/jquerymobile.css" />
+	<link rel="stylesheet" href="css/style.css" />
 	<link href="favicon.gif" rel="icon" type="image/x-icon" />
 	<script src="scripts/vendor/requirejs/require.js" data-main="scripts/main"></script>
-	<style>
-	#total-rac .ui-content {
-		padding: 0;
-		width: inherit;
-		height: inherit;
-		/*
-		height: 100%;
-		width: 100%;
-		position: absolute;*/
-
-	}
-	#total-rac-chart{
-		/*height: 100%;
-		width: 100%;
-		position: absolute;
-		*/
-	}
-	</style>
 </head>
 <body>
 
 	<div id="projects" data-role="page" data-title="Projects" data-dom-cache="true" data-theme="a"></div>
 
-	<div id="total-rac" data-role="page" data-title="Total User RAC Histories" data-prev="#projects"  data-theme="a">
+	<div id="project-total-rac" data-role="page" data-title="Total User RAC Histories" data-prev="#projects"  data-theme="a">
 		<div data-role="header">
 			<a href="#" data-icon="back" data-rel="back" data-direction="reverse" data-transition="slide">Back</a>
 			<h1><!-- Project.name --></h1>
 		</div>
 		<div data-role="content">
-			<!-- <a href="" onclick="App.Views.TotalRacChart.render();return false;" data-role="button" data-inline="true" data-theme="b">Render</a> -->
-			<div id="total-rac-chart" class="chart"></div>
+			<div id="project-total-rac-chart" class="chart"></div>
+		</div>
+	</div>
+
+	<div id="projects-total-rac" data-role="page" data-title="Total User RAC Histories" data-prev="#projects"  data-theme="a">
+		<div data-role="header">
+			<a href="#" data-icon="back" data-rel="back" data-direction="reverse" data-transition="slide">Back</a>
+			<h1><!-- Project.name --></h1>
+		</div>
+		<div data-role="content">
+			<div id="projects-total-rac-chart" class="chart"></div>
 		</div>
 	</div>
 

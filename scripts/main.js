@@ -59,6 +59,7 @@ require.config({
 })();
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Broadcast Publish Subscribe                           app/scripts/main.js
@@ -68,61 +69,14 @@ require(['backbone'], function (Backbone) {
 
     App.vent = _.extend({}, Backbone.Events);
 
-
-    $(document).ready(function () {
-
-        App.isDesktop = !('ontouchstart' in window) // works on most browsers
-                        || !('onmsgesturechange' in window); // works on ie10
-    });
-
-
-    $(document).on('pagechange', function () {
-
-        console.log('pagechange');
-        App.vent.trigger('resize:'+$.mobile.activePage.attr('id'), getViewportSize());
-
-    });
-
     $(window).resize(function () {
-
-        // console.log('resize');
-        // console.log($.mobile.activePage.attr( "id" ));
 
         clearTimeout(this.id);
         this.id = setTimeout(function () {
 
-            // var $content = $.mobile.activePage.find('div[data-role="content"]').first();
-
-            App.vent.trigger('resize:'+$.mobile.activePage.attr('id'), getViewportSize());
-
+            App.vent.trigger('resize:'+$.mobile.activePage.attr('id'));
         }, 300);
-
     });
-
-
-    function getViewportSize() {
-
-        var $header        = $.mobile.activePage.find('div[data-role="header"]').first(),
-            headerHeight   = $header.length>0 ? $header.outerHeight(true) : 0,
-            pageOuterWidth = $.mobile.activePage.outerWidth(true),
-            width;
-
-        if (App.isDesktop && (window.outerWidth - pageOuterWidth)<=20 ) {
-
-            width = window.outerWidth // need to include width scrollbar
-
-        } else {
-
-            width = $.mobile.activePage.outerWidth(true);
-        }
-
-        return {
-            height: $(window).height() - headerHeight,
-            width: width
-        };
-    }
-
-
 
 });
 
@@ -158,7 +112,7 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
             var defaults = $.mobile.changePage.defaults;
             $(document).on('click', 'a[data-rel="back"]', function (event) {
 
-                // event.preventDefault();
+
                 var $this = $(this);
 
                 if ($this.attr('data-transition')) {
@@ -178,25 +132,26 @@ require(['jquery','backbone','routers/router'], function ($, Backbone, Router) {
                 }
 
                 $.mobile.changePage($this.attr('href'));
-                // window.history.back();
-                // return false;
             });
 
-            // $(document).on('pagebeforecreate', '[data-role="page"]', function () {
+            $(document).on('pagebeforecreate', '[data-role="page"]', function () {
 
-            //     setTimeout(function () {
+                setTimeout(function () {
 
-            //         $.mobile.loading('show');
-            //     }, 1);
-            // });
+                    $.mobile.loading('show');
+                }, 0);
+            });
 
-            // $(document).on('pageshow', '[data-role="page"]', function () {
+            $(document).on('pageshow', '[data-role="page"]', function () {
 
-            //     setTimeout(function () {
+                setTimeout(function () {
 
-            //         $.mobile.loading('hide');
-            //     }, 300);
-            // });
+                    $.mobile.loading('hide');
+                }, 300);
+            });
+
+            App.isDesktop = !('ontouchstart' in window) // works on most browsers
+                        || !('onmsgesturechange' in window); // works on ie10
 
         }
     );
