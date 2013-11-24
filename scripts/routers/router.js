@@ -13,7 +13,7 @@ define([
     '../views/projects/ProjectsView',
 
     '../collections/TeamMemberRacCollection',
-    '../views/totalrac/TotalRacView',
+    '../views/totalrac/TotalRacChartView',
     '../views/teammemberrac/TeamMemberRacView'
 
 ], function (
@@ -43,7 +43,7 @@ define([
             // App.Views.TotalRac = new TotalRacView();
             App.Views.TeamMemberRac = new TeamMemberRacView();
 
-            // Tells Backbone to start watching for hashchange events
+            // Start watching for hashchange events
             Backbone.history.start();
         },
 

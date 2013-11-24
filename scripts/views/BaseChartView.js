@@ -37,22 +37,42 @@ define(['jquery','backbone'], function ($, Backbone) {
         el: null,
         pageId: null,
         chart: null,
-        chartTitle: '',
+        isReflowed: false,
 
         options: {
+            page: {
+                title: 'Page Title'
+            },
+
             chart:{
                 renderTo: null,
                 reflow: false, // Manually reflow the chart when window is resized.
                 borderRadius: 0,
                 events: {
-                    load: function () {}
+                    load: function (chart) {}
                 }
             },
 
             title: {
-                text: '...',
-                y: 45
+                text: '',
+                y: 83
             },
+
+            xAxis: [{
+                events: {
+                    afterSetExtremes: function (event) {
+
+                        // var chartId = $(this.chart.container).parent('div.chart').first().attr('id'),
+                        //     min, max, text;
+                        // min  = event.min===null ? this.dataMin : event.min;
+                        // max  = event.max===null ? this.dataMax : event.max;
+                        // min  = Highcharts.dateFormat('%b %e, %Y', min);
+                        // max  = Highcharts.dateFormat('%b %e, %Y', max);
+                        // text = min + ' to ' + max;
+                        // App.vent.trigger(chartId + ':updateTitle', text);
+                    }
+                }
+            }],
 
             yAxis: {
                 labels: {
@@ -67,6 +87,7 @@ define(['jquery','backbone'], function ($, Backbone) {
 
             plotOptions: {
                 series: {
+                    enableMouseTracking: false,
                     dataGrouping: {
                         enabled: true
                     }
@@ -101,11 +122,13 @@ define(['jquery','backbone'], function ($, Backbone) {
             legend: {
                 enabled: true,
                 align: 'center',
-                floating: true,
+                floating: false,
+                y: 0,
                 verticalAlign: 'top'
             },
 
             rangeSelector: {
+                // inputPosition: {y: 0},
                 buttonTheme: {
                     r: 5
                 },
@@ -128,26 +151,40 @@ define(['jquery','backbone'], function ($, Backbone) {
                     type: 'all',
                     text: 'All'
                 }],
-                inputEnabled: false // enabled when chart width >= ?
+                inputEnabled: true // enabled when chart width >= ?
             }
         },
+
 
         initialize: function (options) {
 
             var self     = this;
-            this.options = $.extend(this.options, options);
+            this.options = $.extend(true, this.options, options);
             this.pageId  = this.$el.attr('id');
+            this.chartId = this.options.chart.renderTo;
 
-            App.vent.on(this.pageId + ':showSingle', this.showSingle, this);
-            App.vent.on(this.pageId + ':showAll', this.showAll, this);
-            App.vent.on('resize' + ':' + this.pageId, this.reflow, this);
+            // this.setPageTitle();
+            this.bindVents();
 
-            $(document).on('pagechange', function () {
+            $(document).on('pagechange', function (toPage, options) {
 
-                self.reflow();
+                if (options.toPage.attr('id')===self.pageId) {
+
+                    console.log('toPage = '+self.pageId);
+                    self.reflow();
+                }
             });
 
             this.$el.on('pagehide', this.removeSeries.bind(this));
+        },
+
+
+        bindVents: function () {
+
+            App.vent.on(this.pageId + ':showSingle', this.showSingle, this);
+            App.vent.on(this.pageId + ':showAll', this.showAll, this);
+            // App.vent.on(this.chartId + ':updateTitle', this.updateTitle, this);
+            App.vent.on('resize' + ':' + this.pageId, this.reflow, this);
         },
 
 
@@ -158,6 +195,7 @@ define(['jquery','backbone'], function ($, Backbone) {
 
                 viewport = this.getViewportSize();
                 this.chart.setSize(viewport.width, viewport.height, false);
+                this.isReflowed = true;
             }
         },
 
@@ -208,13 +246,16 @@ define(['jquery','backbone'], function ($, Backbone) {
             var self = this,
                 project = this.model.get('project');
 
-            this.$el.find('div[data-role="header"] h1').text('Header Text Here');
+            this.$el.find('div[data-role="header"] h1').text(this.pageTitle);
 
             if (!this.chart) {
 
                 this.chart = new Highcharts.StockChart(this.options);
             }
-            this.reflow();
+            if (self.isReflowed===false) {
+
+                this.reflow();
+            }
 
             this.chart.addSeries({
                 name: project.name ,
@@ -235,9 +276,10 @@ define(['jquery','backbone'], function ($, Backbone) {
 
                 this.chart = new Highcharts.StockChart(this.options);
             }
-            this.reflow();
+            if (self.isReflowed===false) {
 
-            this.$el.find('div[data-role="header"] h1').text('Header Text Here!');
+                this.reflow();
+            }
 
             _.each(this.collection.models, function (model, index) {
 
@@ -277,6 +319,19 @@ define(['jquery','backbone'], function ($, Backbone) {
                 height: $(window).height() - headerHeight,
                 width: width
             };
+        },
+
+
+        setPageTitle: function (text) {
+
+            text = !text ? this.options.page.title : text;
+            this.$el.find('div[data-role="header"] h1').text(text);
+        },
+
+
+        updateTitle: function (titleText, subTitleText) {
+
+            this.chart.setTitle({text: titleText}, {text: subTitleText});
         }
 
     });
