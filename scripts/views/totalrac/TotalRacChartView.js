@@ -7,10 +7,12 @@ define([
     'jquery',
     'backbone',
     'highstock',
+    'views/BaseChartView',
     'models/TotalRacModel',
     'collections/TotalRacCollection',
-    'views/BaseChartView'
-], function ($, Backbone, Highstock, TotalRacModel, TotalRacCollection, BaseChartView) {
+    'mustache',
+    'text!templates/totalrac/TotalRacChartView.html'
+], function ($, Backbone, Highstock, BaseChartView, TotalRacModel, TotalRacCollection, Mustache, totalRacChartTemplate) {
 
 
     /**
@@ -37,8 +39,9 @@ define([
 
         initialize: function (options) {
 
-            $.extend(true, options, this.defaultOptions);
+            this.$el.html(totalRacChartTemplate);
 
+            $.extend(true, options, this.defaultOptions);
             this._super('initialize', options);
             this.model      = new TotalRacModel();
             this.collection = new TotalRacCollection();
